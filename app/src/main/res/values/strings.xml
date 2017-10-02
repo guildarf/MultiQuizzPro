@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MultiQuizz</string>
+    <string name="btn_next">Siguiente</string>
+    <string name="finish">Final</string>
+    <string name="btn_prev">Anterior</string>
+    <string name="label_question">Pregunta</string>
+    <array name="RB_text">
+        <item>*Cuatro;Tres;Veintidós;Octubre;Cuanto es 2+2?</item>
+        <item>Uno;Dos;*Tres;1992;Cuantos huevos le regalaron a daenerys por su boda?</item>
+        <item>Lagartija;*Meñique;Montaña;23;Que apodo tiene Peter Baelish?</item>
+    </array>
+    <string name="correctas">Respuestas correctas: </string>
+    <string name="incorrectas">Respuestas incorrectas:</string>
+</resources>

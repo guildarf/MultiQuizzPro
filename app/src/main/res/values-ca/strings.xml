@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MultiQuizz</string>
+    <string name="btn_next">Següent</string>
+    <string name="finish">Final</string>
+    <string name="label_question">Pregunta</string>
+    <array name="RB_text">
+        <item>Tres;Vintidós;*Quatre;Octubre;Quant es 2+2?</item>
+        <item>Un;Dos;*Tres;1992;Cuants ous li van regalar a Daenerys pel seu casament?</item>
+        <item>Sargantana;*DitPetit;Muntanya;23;Quin sobrenom te Peter Baelish?</item>
+    </array>
+    <string name="correctas">Respostes correctes: </string>
+    <string name="incorrectas">Respostes incorrectes:</string>
+</resources>
