@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MultiQuizz</string>
+    <string name="app_name">MultiQuizPro</string>
     <string name="btn_next">Següent</string>
     <string name="finish">Final</string>
     <string name="label_question">Pregunta</string>
@@ -11,4 +11,7 @@
     </array>
     <string name="correctas">Respostes correctes: </string>
     <string name="incorrectas">Respostes incorrectes:</string>
+    <string name="results">Resultats</string>
+    <string name="start_over">Reiniciar</string>
+    <string name="nocontestadas">No contestades:</string>
 </resources>

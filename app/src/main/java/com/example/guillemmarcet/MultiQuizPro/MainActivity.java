@@ -1,5 +1,8 @@
-package com.example.guillemmarcet.MultiQuiz;
+package com.example.guillemmarcet.MultiQuizPro;
 
+import android.content.DialogInterface;
+import android.os.PersistableBundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -7,20 +10,35 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    int correct_answer=-1;
-    int pregunta_actual=0;
+
+    public static final String CORRECT_ANSWER = "correct_answer";
+    public static final String CURRENT_QUESTION = "current_question";
+    public static final String CORRECTAS = "correctas";
+    public static final String RESPUESTAS = "respuestas";
     String[] all_preguntas;
     int[] id_radio={R.id.radioButton1,R.id.radioButton2,R.id.radioButton3,R.id.radioButton4};
     TextView enunciat;
-    boolean[] correctas;
-    int[] respuestas;
+
     Button btn_check;
     Button btn_prev;
     RadioGroup group;
+
+    int correct_answer=-1;
+    int pregunta_actual=0;
+    boolean[] correctas;
+    int[] respuestas;
+
+   @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+       outState.putInt(CORRECT_ANSWER,correct_answer);
+       outState.putInt(CURRENT_QUESTION,pregunta_actual);
+       outState.putBooleanArray(CORRECTAS,correctas);
+       outState.putIntArray(RESPUESTAS, respuestas);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +47,23 @@ public class MainActivity extends AppCompatActivity {
         all_preguntas =getResources().getStringArray(R.array.RB_text);
         enunciat=(TextView) findViewById(R.id.text_question);
         group=(RadioGroup)findViewById(R.id.radioGrupo);
-        correctas=new boolean[all_preguntas.length];
-        respuestas=new int[all_preguntas.length];
-        for(int i=0;i<all_preguntas.length;i++) {
-            respuestas[i] = -1;
-        }
+
         btn_check=(Button)findViewById(R.id.btn_check);
         btn_prev=(Button)findViewById(R.id.btn_prev);
-        updateQuestion();
+
+        if(savedInstanceState==null){
+            inicializar();
+        } else  {
+            Bundle state=savedInstanceState;
+            correct_answer=state.getInt(CORRECT_ANSWER);
+            pregunta_actual=state.getInt(CURRENT_QUESTION);
+            correctas=state.getBooleanArray(CORRECTAS);
+            respuestas=state.getIntArray(RESPUESTAS);
+            updateQuestion();
+        }
+
+
+
         btn_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,18 +80,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else{
 
-                    correctas[pregunta_actual]=true;
+                    correctas[pregunta_actual]=false;
                 }
 
                 if(pregunta_actual==all_preguntas.length-1){
-                    int contador=0;
-                    for(int i=0;i<correctas.length;i++){
-                        if(correctas[i])contador++;
-                    }
-                    String s= getResources().getString(R.string.correctas)+" "+String.valueOf(contador)+" -- "+getResources().getString(R.string.incorrectas)+" "+String.valueOf((correctas.length)-contador);
-
-                    Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
-                    finish();
+                    checkResults();
                 }
 
                 if(pregunta_actual<all_preguntas.length-1) {
@@ -96,6 +116,56 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void inicializar() {
+        correctas=new boolean[all_preguntas.length];
+        respuestas=new int[all_preguntas.length];
+        for(int i=0;i<all_preguntas.length;i++) {
+            respuestas[i] = -1;
+        }
+        pregunta_actual=0;
+        updateQuestion();
+    }
+
+    private void checkResults() {
+        int contador=0,incorrectas=0,noContestadas=0;
+        for(int i=0;i<all_preguntas.length;i++){
+            if(correctas[i]){
+                contador++;
+            }
+            else if(respuestas[i]==-1){
+                noContestadas++;
+            }
+            else incorrectas++;
+        }
+        String s= getResources().getString(R.string.correctas)+" "+String.valueOf(contador)+"\n"+
+                getResources().getString(R.string.incorrectas)+" "+String.valueOf(incorrectas)+"\n"+
+                getResources().getString(R.string.nocontestadas)+" "+String.valueOf(noContestadas);
+
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle(R.string.results);
+        builder.setMessage(s);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.finish, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.start_over, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                inicializar();
+            }
+        });
+        builder.create().show();
+
+
+
+
+
+    }
+
     private void updateQuestion(){
         String[] text_actual=all_preguntas[pregunta_actual].split(";");
         enunciat.setText(text_actual[4]);
@@ -116,13 +186,11 @@ public class MainActivity extends AppCompatActivity {
             btn_prev.setVisibility(View.GONE);
         }else{
             btn_prev.setVisibility(View.VISIBLE);
-
-            if(pregunta_actual==all_preguntas.length-1){
-                btn_check.setText(R.string.finish);
-            }else{
-                btn_check.setText((R.string.btn_next));
-            }
         }
-
+        if(pregunta_actual==all_preguntas.length-1){
+            btn_check.setText(R.string.finish);
+        }else{
+            btn_check.setText((R.string.btn_next));
+        }
     }
 }

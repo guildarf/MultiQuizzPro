@@ -1,4 +1,4 @@
-package com.example.guillemmarcet.MultiQuiz;
+package com.example.guillemmarcet.MultiQuizPro;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

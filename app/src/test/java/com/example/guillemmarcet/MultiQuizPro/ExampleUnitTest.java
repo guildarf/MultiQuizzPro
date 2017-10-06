@@ -1,4 +1,4 @@
-package com.example.guillemmarcet.MultiQuiz;
+package com.example.guillemmarcet.MultiQuizPro;
 
 import org.junit.Test;
 
